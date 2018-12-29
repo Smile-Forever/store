@@ -11,7 +11,7 @@ public class User extends BaseEntity {
 	private String username;
 	private String password;
 	private String salt;
-	private Integer gebder;
+	private Integer gender;
 	private String phone;
 	private String email;
 	private String avator;
@@ -49,12 +49,12 @@ public class User extends BaseEntity {
 		this.salt = salt;
 	}
 
-	public Integer getGebder() {
-		return gebder;
+	public Integer getGender() {
+		return gender;
 	}
 
-	public void setGebder(Integer gebder) {
-		this.gebder = gebder;
+	public void setGender(Integer gender) {
+		this.gender = gender;
 	}
 
 	public String getPhone() {
@@ -96,7 +96,7 @@ public class User extends BaseEntity {
 	@Override
 	public String toString() {
 		return "User [id=" + id + ", username=" + username + ", password=" + password + ", salt=" + salt + ", gebder="
-				+ gebder + ", phone=" + phone + ", email=" + email + ", avator=" + avator + ", isDelete=" + isDelete
+				+ gender + ", phone=" + phone + ", email=" + email + ", avator=" + avator + ", isDelete=" + isDelete
 				+ "]";
 	}
 
