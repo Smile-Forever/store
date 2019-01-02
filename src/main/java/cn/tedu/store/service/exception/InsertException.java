@@ -1,5 +1,10 @@
 package cn.tedu.store.service.exception;
 
+/**
+ * 插入数据异常
+ * @author Smile
+ *
+ */
 public class InsertException extends ServiceException{
 
 	/**

@@ -14,14 +14,14 @@
             username, password,
             salt, gender,
             phone, email,
-            avator, is_delete,
+            avatar, is_delete,
             created_user, created_time,
             modified_user, modified_time
         ) VALUES (
             #{username}, #{password},
             #{salt}, #{gender},
             #{phone}, #{email},
-            #{avator}, #{isDelete},
+            #{avatar}, #{isDelete},
             #{createdUser}, #{createdTime},
             #{modifiedUser}, #{modifiedTime}
         )
@@ -34,7 +34,7 @@
         resultType="cn.tedu.store.entity.User">
         SELECT 
             id, username, password,
-            salt, avator, 
+            salt, avatar, 
             is_delete isDelete
         FROM 
             t_user

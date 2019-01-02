@@ -1,5 +1,10 @@
 package cn.tedu.store.service.exception;
 
+/**
+ * 违反unique约束的异常
+ * @author Smile
+ *
+ */
 public class DuplicateKeyException extends ServiceException{
 
 	/**

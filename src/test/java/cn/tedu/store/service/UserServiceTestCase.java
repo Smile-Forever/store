@@ -8,9 +8,12 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.test.context.junit4.SpringRunner;
 
-import cn.tedu.store.entity.User;
 
+
+import cn.tedu.store.entity.User;
+import cn.tedu.store.service.exception.PasswordNotMatchException;
 import cn.tedu.store.service.exception.ServiceException;
+import cn.tedu.store.service.exception.UserNotFoundException;
 
 @RunWith(SpringRunner.class)
 @SpringBootTest
@@ -25,9 +28,9 @@ public class UserServiceTestCase {
 				Date now = new Date();
 				User user = new User();
 				user.setUsername("SpringMVC");
-				user.setPassword("HELLO");
+				user.setPassword("123");
 				user.setGender(1);
-				user.setPhone("1999999999");
+				user.setPhone("16666666666");
 				user.setEmail("SpringMVC@tedu.cn");
 				
 				User result = userService.reg(user);
@@ -37,4 +40,18 @@ public class UserServiceTestCase {
 				System.out.println("错误信息：" + e.getMessage());
 			} 
 	    }
+	    
+	    @Test
+	    public void login() {
+			 try {
+				String username = "JAVA";
+				String password = "123";
+				 
+				 User user = userService.login(username, password);
+				 System.out.println(user);
+			} catch (ServiceException e) {
+				System.out.println("错误类型：" + e.getClass().getName());
+				System.out.println("错误描述：" + e.getMessage());
+			}
+		}
 }

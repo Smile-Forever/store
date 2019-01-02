@@ -14,7 +14,7 @@ public class User extends BaseEntity {
 	private Integer gender;
 	private String phone;
 	private String email;
-	private String avator;
+	private String avatar;
 	private Integer isDelete;
 
 	public Integer getId() {
@@ -73,12 +73,12 @@ public class User extends BaseEntity {
 		this.email = email;
 	}
 
-	public String getAvator() {
-		return avator;
+	public String getAvatar() {
+		return avatar;
 	}
 
-	public void setAvator(String avator) {
-		this.avator = avator;
+	public void setAvator(String avatar) {
+		this.avatar = avatar;
 	}
 
 	public Integer getIsDelete() {
@@ -96,7 +96,7 @@ public class User extends BaseEntity {
 	@Override
 	public String toString() {
 		return "User [id=" + id + ", username=" + username + ", password=" + password + ", salt=" + salt + ", gebder="
-				+ gender + ", phone=" + phone + ", email=" + email + ", avator=" + avator + ", isDelete=" + isDelete
+				+ gender + ", phone=" + phone + ", email=" + email + ", avator=" + avatar + ", isDelete=" + isDelete
 				+ "]";
 	}
 
