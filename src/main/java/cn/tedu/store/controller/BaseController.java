@@ -1,5 +1,7 @@
 package cn.tedu.store.controller;
 
+import javax.servlet.http.HttpSession;
+
 import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.bind.annotation.ResponseBody;
 
@@ -7,6 +9,7 @@ import cn.tedu.store.service.exception.DuplicateKeyException;
 import cn.tedu.store.service.exception.InsertException;
 import cn.tedu.store.service.exception.PasswordNotMatchException;
 import cn.tedu.store.service.exception.ServiceException;
+import cn.tedu.store.service.exception.UpdateException;
 import cn.tedu.store.service.exception.UserNotFoundException;
 import cn.tedu.store.util.ResponseResult;
 
@@ -32,7 +35,19 @@ public abstract class BaseController {
 		}else if(e instanceof InsertException) {
 			//500 - InsertException  插入异常
 			return new ResponseResult<>(500 , e.getMessage());
+		}else if(e instanceof UpdateException) {
+			//501 - 更新数据异常
+			return new ResponseResult<>(501 , e.getMessage());
 		}
 		return null;
+	}
+	
+	/**
+	 * 
+	 * @param session
+	 * @return 当前用户的id
+	 */
+	protected Integer getUidFromSession(HttpSession session) {
+		return Integer.valueOf(session.getAttribute("uid").toString());
 	}
 }

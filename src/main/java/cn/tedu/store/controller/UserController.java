@@ -2,7 +2,9 @@ package cn.tedu.store.controller;
 
 import javax.servlet.http.HttpSession;
 
+import org.apache.ibatis.annotations.Param;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
@@ -33,4 +35,17 @@ public class UserController extends BaseController{
 		session.setAttribute("username", user.getUsername());
 		return new ResponseResult<Void>(SUCCESS);
 	}
+	
+	@PostMapping("/password.do")
+	public ResponseResult<Void> changePassword(@RequestParam("old_password")String oldPassword,
+						@RequestParam("new_password")String newPassword , HttpSession session){
+		//获取当前登录用户的id
+		Integer uid = getUidFromSession(session);
+		//执行修改 密码
+		userService.changePassword(uid , oldPassword, newPassword);
+		//返回
+		return new ResponseResult<Void>(SUCCESS);
+	}
+
+	
 }

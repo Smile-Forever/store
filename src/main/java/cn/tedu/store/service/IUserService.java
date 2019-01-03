@@ -4,6 +4,7 @@ import cn.tedu.store.entity.User;
 import cn.tedu.store.service.exception.DuplicateKeyException;
 import cn.tedu.store.service.exception.InsertException;
 import cn.tedu.store.service.exception.PasswordNotMatchException;
+import cn.tedu.store.service.exception.UpdateException;
 import cn.tedu.store.service.exception.UserNotFoundException;
 
 public interface IUserService {
@@ -26,4 +27,14 @@ public interface IUserService {
 	 */
 	User login(String username , String password) 
 			throws UserNotFoundException ,PasswordNotMatchException;
+	
+	
+	void changePassword(
+		    Integer uid, 
+		    String oldPassword, 
+		    String newPassword) throws UserNotFoundException, PasswordNotMatchException, UpdateException;
+
+	void changeInfo(User user)
+			throws UserNotFoundException, 
+				UpdateException;;
 }

@@ -26,6 +26,47 @@
             #{modifiedUser}, #{modifiedTime}
         )
     </insert>
+    
+    <!--  
+	 * 修改密码
+	 * @param id 用户id
+	 * @param password 密码
+	 * @param modified_user 修改人
+	 * @param modified_time 修改时间
+	 * @return
+	 */
+	Integer updatePassword(@Param("uid")Integer uid,
+						   @Param("password")String password,
+						   @Param("modifiedUser")String modifiedUser,
+						   @Param("modifiedTime")Date modifiedTime); -->
+    <update id="updatePassword">
+		update 
+			t_user
+		set
+			password=#{password},
+		    modified_user = #{modifiedUser},
+		    modified_time = #{modifiedTime}
+		where 
+			id=#{uid}
+    </update>
+    
+   <!--  /**
+	 *  按id查询
+	 * @param id
+	 * @return 
+	 */ -->
+    <select id="findById"
+	resultType="cn.tedu.store.entity.User">
+	SELECT 
+		username,
+		gender, phone, email,
+		password, salt,
+		is_delete AS isDelete
+	FROM 
+		t_user
+	WHERE 
+		id=#{id}
+</select>
 
     <!-- 根据用户名查询用户数据 -->
     <!-- 应用于：注册，登录 -->
@@ -41,5 +82,32 @@
         WHERE 
             username=#{username}
     </select>
+    
+    <!-- 
+    	
+	   修改用户资料(不含用户名，密码和头像)
+	 @param user 用户资料
+	 @return  受影响的行数
+	Integer updateInfo(User user);
+     -->
+   	<update id="updateInfo">
+   	update 
+   		t_user
+	set
+		<if test="gender != null">
+		gender=#{gender},
+		</if>
+		<if test="phone != null">
+		phone=#{phone},
+		</if>
+		<if test="email != null">
+		email=#{email},
+		</if>
+		modified_user=#{modifiedUser},
+		modified_time=#{modifiedTime}
+	where
+		id=#{id}
+   	</update>
+    
 
 </mapper>

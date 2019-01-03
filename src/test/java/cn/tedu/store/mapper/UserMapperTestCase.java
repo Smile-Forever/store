@@ -42,5 +42,35 @@ public class UserMapperTestCase {
         User user = userMapper.findByUsername(username);
         System.err.println(user);
     }
+    
+    @Test
+    public void update() {
+    	Integer uid =1;
+    	String password = "1234";
+    	String modifiedUser = "Eric";
+    	Date modifiedTime = new Date();
+    	Integer rows = userMapper.updatePassword(uid ,password, modifiedUser, modifiedTime);
+    	System.out.println(rows);
+    }
+    
+    @Test
+    public void findById() {
+        Integer id = 1;
+        User user = userMapper.findById(id);
+        System.err.println(user);
+    }
+    
+    @Test
+    public void updateInfo() {
+    	User user = new User();
+		user.setId(3);
+		user.setGender(0);
+		user.setPhone("13100131001");
+		user.setEmail("liucs@tedu.cn");
+		user.setModifiedUser("ChengHeng");
+		user.setModifiedTime(new Date());
+		Integer rows = userMapper.updateInfo(user);
+		System.err.println("rows=" + rows);
+    }
 
 }

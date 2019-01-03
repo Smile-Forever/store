@@ -27,8 +27,8 @@ public class UserServiceTestCase {
 	        try {
 				Date now = new Date();
 				User user = new User();
-				user.setUsername("SpringMVC");
-				user.setPassword("123");
+				user.setUsername("java");
+				user.setPassword("666");
 				user.setGender(1);
 				user.setPhone("16666666666");
 				user.setEmail("SpringMVC@tedu.cn");
@@ -54,4 +54,30 @@ public class UserServiceTestCase {
 				System.out.println("错误描述：" + e.getMessage());
 			}
 		}
+	    
+	  
+	    @Test
+	    public void changePassword() {
+			 try {
+				Integer uid = 4;
+				 String oldPassword = "66";
+				 String newPassword = "666";
+				userService.changePassword(uid, oldPassword, newPassword);
+				System.out.println("OK");
+			} catch (ServiceException e) {
+				System.out.println("错误类型：" + e.getClass().getName());
+				System.out.println("错误描述：" + e.getMessage());
+			}
+		}
+	    @Test
+	    public void updateInfo() {
+	    	User user = new User();
+			user.setId(3);
+			user.setGender(1);
+			user.setPhone("19966677889");
+			user.setEmail("liucs@tedu.cn");
+	    	userService.changeInfo(user);
+	    	System.out.println("OK");
+	    }
+	    
 }

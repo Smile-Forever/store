@@ -3,6 +3,7 @@ package cn.tedu.store.service.impl;
 import java.util.Date;
 import java.util.UUID;
 
+import org.apache.ibatis.annotations.Param;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.util.DigestUtils;
@@ -13,6 +14,7 @@ import cn.tedu.store.service.IUserService;
 import cn.tedu.store.service.exception.DuplicateKeyException;
 import cn.tedu.store.service.exception.InsertException;
 import cn.tedu.store.service.exception.PasswordNotMatchException;
+import cn.tedu.store.service.exception.UpdateException;
 import cn.tedu.store.service.exception.UserNotFoundException;
 
 /**
@@ -65,7 +67,69 @@ public class UserServiceImpl implements IUserService {
 		// 返回摘要结果
 		return str;
 	}
+	
+	/**
+	 * 
+	 * @param uid 
+	 * @param password
+	 * @param modifiedUser
+	 * @param modifiedTime
+	 */
+	private void updatePassword(Integer uid, String password, 
+			String modifiedUser, Date modifiedTime) {
+		Integer rows = userMapper.updatePassword(uid, password, modifiedUser, modifiedTime);
+		if (rows != 1) {
+			throw new UpdateException("增加用户数据时出现未知错误!");
+		}
+	}
 
+	/**
+	 * 
+	 * @param id
+	 * @return
+	 */
+	private User findById(Integer id) {
+		return userMapper.findById(id);
+	}
+	
+	/**
+	 * 
+	 * @param user
+	 */
+	private void updateInfo(User user) {
+		//执行更新，获取返回值
+		Integer rows = userMapper.updateInfo(user);
+		//判断返回值，出错抛出更新时的未知错误
+		if(rows != 1) {
+			throw new UpdateException("更新时的未知错误");
+		}
+	}
+	
+	/**
+	 * 修改资料
+	 */
+	public void changeInfo(User user)throws UserNotFoundException, UpdateException {
+			// 根据user.getId()查询用户数据
+		User data = userMapper.findById(user.getId());
+			// 判断数据是否为null
+		if(data == null) {
+			// 是：抛出：UserNotFoundException
+			throw new UserNotFoundException("用户名不存在!");
+		}
+		// 判断is_delete是否为1
+		if(data.getIsDelete() == 1) {
+			// 是：抛出：UserNotFoundException
+			throw new UserNotFoundException("用户名不存在!");
+		}
+		// 向参数对象中封装：
+		// - modified_user > data.getUsername()
+		user.setModifiedUser(data.getUsername());
+			// - modified_time > new Date()
+		user.setModifiedTime(new Date());
+		// 执行修改：gender,phone,email,modified_useumodified_time
+		userMapper.updateInfo(user);
+		}
+	
 	/**
 	 * 登录
 	 */
@@ -77,29 +141,70 @@ public class UserServiceImpl implements IUserService {
 		if (data == null) {
 			// 是：抛出异常，用户名不存在 UserNotFoundException
 			throw new UserNotFoundException("登陆失败!您尝试登录的用户名不存在!");
-		} 
-			// 否：非null，根据用户名找到了数据，取出盐值
-			String salt = data.getSalt();
-			// 对参数password执行加密
-			String md5Password = getMd5Password(password, salt);
-			// 判断密码是否匹配
-			if (data.getPassword().equals(md5Password)) {
-				// 是：匹配，密码正确，则判断是否被删除
-				if (data.getIsDelete() == 1) {
-					// 是：已被删除，则抛出UserNotFoundException或自定义“用户被删除异常”
-					throw new UserNotFoundException("登陆失败!您尝试登录的用户名已被删除!!");
-				} 
-						// 否：没被删除，则登录成功，将第1步查询的用户数据中的盐值和密码设置为null
-						data.setPassword(null);
-						data.setSalt(null);
-						return data;
-						
-			} else {
-				// 否：不匹配，密码错误，则抛出PasswordNotMatchException
-				throw new PasswordNotMatchException("密码不匹配!");
+		}
+		// 否：非null，根据用户名找到了数据，取出盐值
+		String salt = data.getSalt();
+		// 对参数password执行加密
+		String md5Password = getMd5Password(password, salt);
+		// 判断密码是否匹配
+		if (data.getPassword().equals(md5Password)) {
+			// 是：匹配，密码正确，则判断是否被删除
+			if (data.getIsDelete() == 1) {
+				// 是：已被删除，则抛出UserNotFoundException或自定义“用户被删除异常”
+				throw new UserNotFoundException("登陆失败!您尝试登录的用户名已被删除!!");
+			}
+			// 否：没被删除，则登录成功，将第1步查询的用户数据中的盐值和密码设置为null
+			data.setPassword(null);
+			data.setSalt(null);
+			return data;
+
+		} else {
+			// 否：不匹配，密码错误，则抛出PasswordNotMatchException
+			throw new PasswordNotMatchException("密码不匹配!");
 		}
 	}
-
+	
+	
+	/**
+	 * 修改密码
+	 */
+	@Override
+	public void changePassword(Integer uid, String oldPassword, String newPassword)
+			throws UserNotFoundException, UpdateException, PasswordNotMatchException {
+		// 根据uid查询用户数据
+		User data = userMapper.findById(uid);
+		// 判断查询结果是否为null
+		if (data == null) {
+			// 是：抛出异常：UserNotFoundException
+			throw new UserNotFoundException("修改密码失败!您尝试登录的用户名不存在!!");
+		}
+		// 判断查询结果中的isDelete是否为1
+		if (data.getIsDelete() == 1) {
+			// 是：抛出异常：UserNotFoundException
+			throw new UserNotFoundException("修改密码失败!您尝试更新的数据不存在!!");
+		}
+		// 取出查询结果中的盐值
+		String salt = data.getSalt();
+		// 对参数oldPassword执行MD5加密
+		String oldMD5Password = getMd5Password(oldPassword, salt);
+		// 将加密结果与查询结果中的password对比是否匹配
+		if (data.getPassword().equals(oldMD5Password)) {
+			// 是：原密码正确，对参数newPassword执行MD5加密
+			String newMD5Password = getMd5Password(newPassword, salt);
+			// 获取当前时间
+			Date now = new Date();
+			// 更新密码
+			updatePassword(uid, newMD5Password, data.getUsername(), now);
+		} else {
+			// 否：原密码错误，抛出异常：PasswordNotMatchException
+			throw new PasswordNotMatchException("修改密码失败!原密码错误!");
+		}
+	}
+	
+	
+	/**
+	 * 注册
+	 */
 	@Override
 	public User reg(User user) throws DuplicateKeyException, InsertException {
 		// 根据尝试注册的用户名查询数据库
@@ -133,4 +238,6 @@ public class UserServiceImpl implements IUserService {
 		addnew(user);
 		return user;
 	}
+
+	
 }
