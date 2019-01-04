@@ -33,8 +33,20 @@ public interface IUserService {
 		    Integer uid, 
 		    String oldPassword, 
 		    String newPassword) throws UserNotFoundException, PasswordNotMatchException, UpdateException;
-
+	/**
+	 * 修改用户个人资料
+	 * @param user
+	 * @throws UserNotFoundException
+	 * @throws UpdateException
+	 */
 	void changeInfo(User user)
 			throws UserNotFoundException, 
-				UpdateException;;
+				UpdateException;
+	/**
+	 * 根据id获取用户数据
+	 * @param id 用户 id
+	 * @return
+	 */
+	User getById(Integer id);
+	
 }

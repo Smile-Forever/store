@@ -40,6 +40,43 @@ public class UserServiceImpl implements IUserService {
 			throw new InsertException("增加用户时出现未知错误!");
 		}
 	}
+	
+	/**
+	 * 
+	 * @param uid 
+	 * @param password
+	 * @param modifiedUser
+	 * @param modifiedTime
+	 */
+	private void updatePassword(Integer uid, String password, 
+			String modifiedUser, Date modifiedTime) {
+		Integer rows = userMapper.updatePassword(uid, password, modifiedUser, modifiedTime);
+		if (rows != 1) {
+			throw new UpdateException("增加用户数据时出现未知错误!");
+		}
+	}
+	
+	/**
+	 * 
+	 * @param user
+	 */
+	private void updateInfo(User user) {
+		//执行更新，获取返回值
+		Integer rows = userMapper.updateInfo(user);
+		//判断返回值，出错抛出更新时的未知错误
+		if(rows != 1) {
+			throw new UpdateException("更新用户数据时的未知错误");
+		}
+	}
+	
+	/**
+	 * 
+	 * @param id
+	 * @return
+	 */
+	private User findById(Integer id) {
+		return userMapper.findById(id);
+	}
 
 	/**
 	 * @param username 用户名
@@ -69,40 +106,17 @@ public class UserServiceImpl implements IUserService {
 	}
 	
 	/**
-	 * 
-	 * @param uid 
-	 * @param password
-	 * @param modifiedUser
-	 * @param modifiedTime
+	 * 根据id获取用户数据
+	 * @param id 用户 id
+	 * @return 
 	 */
-	private void updatePassword(Integer uid, String password, 
-			String modifiedUser, Date modifiedTime) {
-		Integer rows = userMapper.updatePassword(uid, password, modifiedUser, modifiedTime);
-		if (rows != 1) {
-			throw new UpdateException("增加用户数据时出现未知错误!");
-		}
-	}
-
-	/**
-	 * 
-	 * @param id
-	 * @return
-	 */
-	private User findById(Integer id) {
-		return userMapper.findById(id);
-	}
-	
-	/**
-	 * 
-	 * @param user
-	 */
-	private void updateInfo(User user) {
-		//执行更新，获取返回值
-		Integer rows = userMapper.updateInfo(user);
-		//判断返回值，出错抛出更新时的未知错误
-		if(rows != 1) {
-			throw new UpdateException("更新时的未知错误");
-		}
+	@Override
+	public User getById(Integer id) {
+		User data = findById(id);
+		data.setPassword(null);
+		data.setSalt(null);
+		data.setIsDelete(null);
+		return data;
 	}
 	
 	/**
@@ -114,12 +128,12 @@ public class UserServiceImpl implements IUserService {
 			// 判断数据是否为null
 		if(data == null) {
 			// 是：抛出：UserNotFoundException
-			throw new UserNotFoundException("用户名不存在!");
+			throw new UserNotFoundException("修改个人资料失败!您尝试访问的用户名不存在!!");
 		}
 		// 判断is_delete是否为1
 		if(data.getIsDelete() == 1) {
 			// 是：抛出：UserNotFoundException
-			throw new UserNotFoundException("用户名不存在!");
+			throw new UserNotFoundException("修改个人资料失败!您尝试访问的用户名不存在!!");
 		}
 		// 向参数对象中封装：
 		// - modified_user > data.getUsername()
@@ -127,7 +141,7 @@ public class UserServiceImpl implements IUserService {
 			// - modified_time > new Date()
 		user.setModifiedTime(new Date());
 		// 执行修改：gender,phone,email,modified_useumodified_time
-		userMapper.updateInfo(user);
+		updateInfo(user);
 		}
 	
 	/**
@@ -238,6 +252,8 @@ public class UserServiceImpl implements IUserService {
 		addnew(user);
 		return user;
 	}
+
+	
 
 	
 }

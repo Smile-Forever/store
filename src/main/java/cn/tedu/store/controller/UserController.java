@@ -46,6 +46,19 @@ public class UserController extends BaseController{
 		//返回
 		return new ResponseResult<Void>(SUCCESS);
 	}
-
 	
+	@RequestMapping("/info.do")
+	public ResponseResult<User>  getInfo(HttpSession session){
+		Integer id = getUidFromSession(session);
+		User user = userService.getById(id);
+		return new ResponseResult<User>(SUCCESS , user);
+	}
+	
+	@PostMapping("/change_info.do")
+	public ResponseResult<Void>  changeInfo(User user , HttpSession session){
+		Integer id = getUidFromSession(session);
+		user.setId(id);
+		userService.changeInfo(user);
+		return new ResponseResult<>(SUCCESS);
+	}
 }
