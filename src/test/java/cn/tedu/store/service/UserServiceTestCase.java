@@ -23,7 +23,6 @@ public class UserServiceTestCase {
 	@Test
 	public void addnew() {
 		try {
-			Date now = new Date();
 			User user = new User();
 			user.setUsername("java");
 			user.setPassword("666");
@@ -88,5 +87,18 @@ public class UserServiceTestCase {
 		Integer id = 3;
 		User user = userService.getById(id);
 		System.out.println(user);
+	}
+	
+	@Test
+	public void changeAvatar() {
+		try {
+			Integer uid = 4;
+			String avatar = "upload/121.jpg";
+			userService.changeAvatar(uid, avatar);
+			System.out.println("OK");
+		} catch (ServiceException e) {
+			System.out.println("错误类型：" + e.getClass().getName());
+			System.out.println("错误描述：" + e.getMessage());
+		}
 	}
 }

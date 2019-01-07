@@ -109,5 +109,28 @@
 		id=#{id}
    	</update>
     
-
+	<!--
+	 *  修改头像
+	 * @param uid 用户id
+	 * @param avatar 头像
+	 * @param modified_user 修改人
+	 * @param modified_time 修改时间
+	 * @return
+	 */
+	Integer  updateAvatar(@Param(" uid")Integer uid, 
+	
+			@Param("avatar")String avatar,
+			@Param("modifiedUser")String modifiedUser,
+			@Param("modifiedTime")Date modifiedTime);
+	-->
+	<update id="updateAvatar">
+		update
+			t_user
+		set
+			avatar = #{avatar},
+			modified_user=#{modifiedUser},
+			modified_time=#{modifiedTime}
+		where
+			id=#{uid}
+	</update>
 </mapper>

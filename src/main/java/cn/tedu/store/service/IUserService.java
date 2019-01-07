@@ -49,4 +49,13 @@ public interface IUserService {
 	 */
 	User getById(Integer id);
 	
+	/**
+	 * 
+	 * @param id
+	 * @param avatar
+	 * @throws UserNotFoundException
+	 * @throws UpdateException
+	 */
+	void changeAvatar(Integer id, String avatar) throws UserNotFoundException,UpdateException;
+	
 }

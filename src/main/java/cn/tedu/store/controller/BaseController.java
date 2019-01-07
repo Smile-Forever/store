@@ -5,6 +5,11 @@ import javax.servlet.http.HttpSession;
 import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.bind.annotation.ResponseBody;
 
+import cn.tedu.store.controller.exception.FileEmptyException;
+import cn.tedu.store.controller.exception.FileSizeOutOfLimitException;
+import cn.tedu.store.controller.exception.FileTypeNotSupportExceptiom;
+import cn.tedu.store.controller.exception.FileUploadException;
+import cn.tedu.store.controller.exception.RequestException;
 import cn.tedu.store.service.exception.DuplicateKeyException;
 import cn.tedu.store.service.exception.InsertException;
 import cn.tedu.store.service.exception.PasswordNotMatchException;
@@ -20,7 +25,7 @@ import cn.tedu.store.util.ResponseResult;
  */
 public abstract class BaseController {
 	public static final Integer SUCCESS = 200;
-	@ExceptionHandler(ServiceException.class)
+	@ExceptionHandler({ServiceException.class , RequestException.class})
 	@ResponseBody
 	public ResponseResult<Void> HandleException(Exception e){
 		if(e instanceof DuplicateKeyException) {
@@ -38,6 +43,16 @@ public abstract class BaseController {
 		}else if(e instanceof UpdateException) {
 			//501 - 更新数据异常
 			return new ResponseResult<>(501 , e.getMessage());
+		}else if(e instanceof FileEmptyException) {
+			//600  - 请求异常
+			return new ResponseResult<>(600 , e.getMessage());
+		}else if(e instanceof FileUploadException) {
+			//601 - 
+			return new ResponseResult<>(601 , e.getMessage());
+		}else if(e instanceof FileSizeOutOfLimitException) {
+			return new ResponseResult<>(602 , e.getMessage());
+		}else if(e instanceof FileTypeNotSupportExceptiom) {
+			return new ResponseResult<>(610 , e.getMessage());
 		}
 		return null;
 	}

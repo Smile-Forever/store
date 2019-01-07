@@ -171,6 +171,11 @@
 				"success": function(json) {
 					if (json.state == 200) {
 						alert("登录成功！");
+						//将投向路径存入cookie
+						$.cookie("avatar" , json.data.avatar ,{
+							expires : 7
+						});
+						console.log("登陆成功!将头像存入到cookie" + $.cookie("avatar"));
 					} else {
 						alert(json.message);
 					}

@@ -35,6 +35,19 @@ public interface UserMapper {
 						   @Param("modifiedTime")Date modifiedTime);
 	
 	/**
+	 *  修改头像
+	 * @param uid 用户id
+	 * @param avatar 头像
+	 * @param modified_user 修改人
+	 * @param modified_time 修改时间
+	 * @return
+	 */
+	Integer  updateAvatar(@Param("uid")Integer uid,
+			@Param("avatar")String avatar,
+			@Param("modifiedUser")String modifiedUser,
+			@Param("modifiedTime")Date modifiedTime);
+	
+	/**
 	 *  修改用户资料(不含用户名，密码和头像)
 	 * @param user 用户资料
 	 * @return  受影响的行数
@@ -56,4 +69,6 @@ public interface UserMapper {
 	 */
 	User findById(Integer id);
 	
+	
+			
 }

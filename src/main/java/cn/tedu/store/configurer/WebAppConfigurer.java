@@ -24,6 +24,8 @@ public class WebAppConfigurer
 			= new ArrayList<>();
 		excludePathPatterns.add("/user/reg.do");
 		excludePathPatterns.add("/user/login.do");
+		excludePathPatterns.add("/web/register.html");
+		excludePathPatterns.add("/web/login.html");
 		// 注册
 		registry
 			.addInterceptor(new LoginInterceptor())
