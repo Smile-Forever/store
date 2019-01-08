@@ -12,7 +12,7 @@ import cn.tedu.store.entity.User;
  * @author Smile
  *
  */
-@Mapper
+
 public interface UserMapper {
 	/**
 	 * 插入用户数据
