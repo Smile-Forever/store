@@ -1,8 +1,11 @@
 package cn.tedu.store.controller;
 
+import java.util.List;
+
 import javax.servlet.http.HttpSession;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
@@ -29,5 +32,12 @@ public class AddressController extends BaseController{
 		address.setUid(uid);
 		addressService.create(address, username);
 		return new ResponseResult<Void>(SUCCESS);
+	}
+	
+	@GetMapping("/list")
+	public ResponseResult<List<Address>> handleAddress(HttpSession session){
+		Integer uid = getUidFromSession(session);
+		List<Address> list = addressService.getListUid(uid);
+		return new ResponseResult<List<Address>>(SUCCESS , list);
 	}
 }

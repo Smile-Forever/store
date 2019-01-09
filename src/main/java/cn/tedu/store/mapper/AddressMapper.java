@@ -1,5 +1,7 @@
 package cn.tedu.store.mapper;
 
+import java.util.List;
+
 import org.apache.ibatis.annotations.Mapper;
 
 import cn.tedu.store.entity.Address;
@@ -18,4 +20,25 @@ public interface AddressMapper {
 	 * @return 受影响的行数 
 	 */
 	Integer getCountByUid(Integer uid);
+	
+	/**
+	 * 根据某用户 获取用户地址
+	 * @param uid
+	 * @return 用户填写的地址
+	 */
+	List<Address> findByUid(Integer uid);
+	
+	/**
+	 * 
+	 * @param uid
+	 * @return
+	 */
+	Integer updateNonDefault(Integer uid);
+	
+	/**
+	 * 
+	 * @param id
+	 * @return
+	 */
+	Integer updateDefault(Integer id);
 }

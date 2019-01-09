@@ -5,6 +5,7 @@ import java.util.List;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import cn.tedu.store.entity.Address;
 import cn.tedu.store.entity.District;
 import cn.tedu.store.mapper.DistrictMapper;
 import cn.tedu.store.service.IDistrictService;
@@ -22,6 +23,8 @@ public class DistrictServiceImpl implements IDistrictService{
 	private List<District> findByParent(String parent) {
 	    return districtMapper.findByParent(parent);
 	}
+	
+	
 	
 	/**
 	 * 根据code代号查询子集

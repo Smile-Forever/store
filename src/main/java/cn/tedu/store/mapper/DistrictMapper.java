@@ -2,6 +2,7 @@ package cn.tedu.store.mapper;
 
 import java.util.List;
 
+import cn.tedu.store.entity.Address;
 import cn.tedu.store.entity.District;
 
 public interface DistrictMapper {
@@ -19,4 +20,11 @@ public interface DistrictMapper {
 	 * @return
 	 */
 	District findByCode(String code);
+	
+	
+	/**
+	 * 
+	 * @return
+	 */
+	List<Address> getListUid(Integer uid);
 }

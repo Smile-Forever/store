@@ -1,9 +1,11 @@
 package cn.tedu.store.service.impl;
 
 import java.util.Date;
+import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import cn.tedu.store.entity.Address;
 import cn.tedu.store.entity.District;
@@ -11,6 +13,7 @@ import cn.tedu.store.mapper.AddressMapper;
 import cn.tedu.store.service.IAddressService;
 import cn.tedu.store.service.IDistrictService;
 import cn.tedu.store.service.exception.InsertException;
+import cn.tedu.store.service.exception.UpdateException;
 
 @Service
 public class AddressServiceImpl implements IAddressService{
@@ -34,6 +37,21 @@ public class AddressServiceImpl implements IAddressService{
 		}
 	}
 	
+	
+	private void updateNonDefault(Integer uid) {
+		Integer rows= addressMapper.updateNonDefault(uid);
+		if(rows < 1) {
+			throw new UpdateException("修改默认地址时出现未知错误");
+		}
+	}
+	
+	private void updateDefault(Integer id) {
+		Integer rows = addressMapper.updateDefault(id);
+		if(rows < 1) {
+			throw new UpdateException("修改默认地址时出现未知错误");
+		}
+	}
+	
 	/**
 	 * 
 	 * @param uid
@@ -41,6 +59,18 @@ public class AddressServiceImpl implements IAddressService{
 	 */
 	private Integer getCountByUid(Integer uid) {
 		return addressMapper.getCountByUid(uid);
+	}
+	
+	
+	private List<Address> findByUid(Integer uid){
+		return addressMapper.findByUid(uid);
+	}
+	
+	@Override
+	@Transactional
+	public void updateNonDefault(Integer uid, Integer id) {
+		updateNonDefault(uid);
+		updateDefault(id);
 	}
 	
 	/**
@@ -65,6 +95,12 @@ public class AddressServiceImpl implements IAddressService{
 		}
 		return provinceName + cityName + areaName;
 	}
+	
+	@Override
+	public List<Address> getListUid(Integer uid) {
+		return findByUid(uid);
+	}
+	
 	@Override
 	public Address create(Address address , String username)  throws InsertException{
 		// 通过address.getUid()得到用户id，并以此查询该用户的收货地址数量
@@ -78,7 +114,7 @@ public class AddressServiceImpl implements IAddressService{
 //			address.setIsDefault(0);
 //		}
 		address.setIsDefault(count == 0 ? 1 : 0);
-	    // TODO 处理district  根据省市区的代号获取District
+	    // 处理district  根据省市区的代号获取District
 		String district = getDistrict(address.getProvince() , address.getCity() , address.getArea());
 		address.setDistrict(district);
 		// 封装日志
@@ -90,4 +126,8 @@ public class AddressServiceImpl implements IAddressService{
 		addnew(address);
 		return address;
 	}
+
+
+
+	
 }

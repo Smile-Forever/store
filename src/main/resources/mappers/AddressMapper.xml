@@ -34,6 +34,38 @@
 	</insert>
 	
 	<!-- 
+	 * 
+	 * @param uid
+	 * @return
+	 *
+		Integer updateNonDefault(Integer uid);
+	 -->
+	<update id="updateNonDefault" parameterType="java.lang.Integer">
+		update
+			t_address
+		set
+			is_default=0
+		where
+			uid=#{uid}
+	</update>
+	
+	<!-- 
+
+	 * 
+	 * @param id
+	 * @return
+	 *
+	Integer updateDefault(Integer id); -->
+	<update id="updateDefault" parameterType="java.lang.Integer">
+		update 
+			t_address
+		set
+			is_default=1
+		where
+			id=#{id}
+	</update>
+	
+	<!-- 
 		/**
 	 * 根据用户id获取该用户收货地址数据的数量
 	 * @param uid 用户id
@@ -49,5 +81,40 @@
 			uid=#{uid}
 	</select>
 	
+	<!-- 
+	 根据某用户 获取用户地址
+	@param uid
+	@return 用户填写的地址
+	List<Address> findByUid(Integer uid);
+	 -->
+	<select id="findByUid" resultType="cn.tedu.store.entity.Address">
+		select 
+			id,name,
+			district,
+			address,
+			phone,tag,
+			is_default as isDefault
+		from t_address
+		where
+			uid=#{uid}
+		order by 
+			is_default desc,
+			modified_time DESC
+	</select>
+	
+	
 	
 </mapper>
+
+
+
+
+
+
+
+
+
+
+
+
+

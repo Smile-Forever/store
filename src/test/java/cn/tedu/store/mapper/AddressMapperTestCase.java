@@ -1,6 +1,7 @@
 package cn.tedu.store.mapper;
 
 import java.util.Date;
+import java.util.List;
 
 import org.junit.Test;
 import org.junit.runner.RunWith;
@@ -45,4 +46,29 @@ public class AddressMapperTestCase {
 		Integer count = addressMapper.getCountByUid(2);
 		System.out.println(count);
 	}
+	
+	@Test
+	public void test() {
+		Integer uid = 4;
+		List<Address> list = addressMapper.findByUid(uid);
+		
+		for (Address add : list) {
+			System.out.println(add);
+		}
+	}
+	
+	@Test
+	public void update() {
+		Integer uid = 4;
+		Integer u = addressMapper.updateNonDefault(uid);
+		System.out.println(u);
+	}
+	
+	@Test
+	public void update2() {
+		Integer id = 1;
+		Integer u = addressMapper.updateDefault(id);
+		System.out.println(u);
+	}
+	
 }

@@ -16,9 +16,6 @@
 		<link rel="stylesheet" type="text/css" href="../css/top.css" />
 		<link rel="stylesheet" type="text/css" href="../css/footer.css" />
 
-		<script type="text/javascript" src="../js/distpicker.data.js"></script>
-		<script type="text/javascript" src="../js/distpicker.js"></script>
-
 		</script>
 
 	</head>
@@ -164,17 +161,23 @@
 							<div class="form-group">
 								<label class="col-md-2 control-label"><span style="color: red;">*</span>省/直辖市：</label>
 								<div class="col-md-3">
-									<select class="form-control" data-province="---- 选择省 ----" id="receiverState"></select>
+									<select name="province" class="form-control" data-province="---- 选择省 ----" id="provinces">
+										<option value="0">---请选择---</option>
+									</select>
 								</div>
 								<label class="col-md-2 control-label"><span style="color: red;">*</span>城市：</label>
 								<div class="col-md-3">
-									<select class="form-control" data-city="---- 选择市 ----" id="receiverCity"></select>
+									<select name="city" class="form-control" data-city="---- 选择市 ----" id="cities">
+										<option value="0">---请选择---</option>
+									</select>
 								</div>
 							</div>
 							<div class="form-group ">
 								<label class="col-md-2 control-label"><span style="color: red;">*</span>区县：</label>
 								<div class="col-md-3">
-									<select class="form-control" data-district="---- 选择区 ----" id="receiverDistrict"></select>
+									<select name="area" class="form-control" data-district="---- 选择区 ----" id="areas">
+										<option value="0">---请选择---</option>
+									</select>
 								</div>
 								<label class="col-md-2 control-label">邮政编码：</label>
 							<div class="col-md-3">
@@ -298,6 +301,112 @@
 		</footer>
 		<!--页脚结束-->
 	<script type="text/javascript">
+	//加载省列表
+	function getProvinceList(){
+		 // 清空当前列表
+	    $("#provinces").empty();
+	    // 添加默认选项
+	    var op = '<option value="0">--- 请选择 ---</option>';
+	    $("#provinces").append(op);
+	    //将请求提交到哪儿
+		var url = "../district/list/86";
+		// 发出ajax请求，并处理结果
+		$.ajax({
+			"url": url,
+			"type": "POST",
+			"dataType": "json",
+			"success": function(json) {
+				//遍历加载新列表项
+				var list = json.data;
+				for(var i = 0; i<list.length; i++){
+					console.log(list[i].code + "-" + list[i].name);
+					var op = '<option value="' + list[i].code + '">' + list[i].name + '</option>'; 
+					$("#provinces").append(op);
+				}
+			}
+		});
+	}
+	
+	//加载市列表
+	function getCityList(){
+		//清空当前列表
+		$("#cities").empty();
+		//添加默认选项
+		var op = '<option value="0">---请选择---</option>'; 
+		$("#cities").append(op);
+		//获取所选的省
+		var code = $("#provinces").val();
+		//判断省的代值
+		if(code == 0){
+			return;
+		}
+		var url = "../district/list/" + code;
+		// 发出ajax请求，并处理结果
+		$.ajax({
+			"url": url,
+			"type": "POST",
+			"dataType": "json",
+			"success": function(json) {
+				//遍历加载
+				var list = json.data;
+				for(var i = 0; i<list.length; i++){
+					console.log(list[i].code + "-" + list[i].name);
+					var op = '<option value="' + list[i].code + '">' + list[i].name + '</option>'; 
+					$("#cities").append(op);
+				}
+			}
+		});
+	}
+	
+	//加载区
+	 function getAreaList(){
+		//清空当前列表
+		$("#areas").empty();
+		//添加默认选项
+		var op = '<option value="0">---请选择---</option>'; 
+		$("#areas").append(op);
+		//获取所选的省
+		var code = $("#cities").val();
+		//判断省的代值
+		if(code == 0){
+			return;
+		}
+		var url = "../district/list/" + code;
+		// 发出ajax请求，并处理结果
+		$.ajax({
+			"url": url,
+			"type": "POST",
+			"dataType": "json",
+			"success": function(json) {
+				//遍历加载
+				var list = json.data;
+				for(var i = 0; i<list.length; i++){
+					console.log(list[i].code + "-" + list[i].name);
+					var op = '<option value="' + list[i].code + '">' + list[i].name + '</option>'; 
+					$("#areas").append(op);
+				}
+			}
+		});
+	}
+	 
+	
+	//当页面加载而完成时，
+	$(document).ready(function(){
+		//加载省列表
+		getProvinceList();
+		
+		$("#provinces").change(function(){
+			//加载市列表
+			getCityList();
+		
+			$("#cities").change(function(){
+				//加载市列表
+				getAreaList();
+			});
+		});
+	});
+	
+	
 	// 为提交按钮绑定单击事件
 	$("#btn-submit").click(function() {
 		// 将请求提交到哪里
@@ -320,7 +429,6 @@
 			},
 			"error": function(xhr, text, errorThrown) {
 				console.log("xhr.status=" + xhr.status);
-				
 				alert("您的登录信息已经过期！请重新登录！");
 				location.href = "login.html";
 			}
