@@ -102,6 +102,54 @@
 			modified_time DESC
 	</select>
 	
+	<!-- 
+	 * 根据用户id获取收货地址
+	 * @param id 收货地址id
+	 * @return 返回获取到的收货地址 ，如果没有匹配的数据返回null
+	 * 
+	Address findById(Integer id);
+	 -->
+	<select id="findById" resultType="cn.tedu.store.entity.Address">
+		select
+			uid,
+			is_default as isDefault
+         from
+         	t_address
+         where
+         	id=#{id}
+	</select>
+	
+	<!-- 
+	 * 最后修改时间
+	 * @param id
+	 * @return
+	Address findLastModified(Integer uid);
+	 -->
+	<select id="findLastModified" resultType="cn.tedu.store.entity.Address">
+		select
+			id
+		from
+			t_address
+		where
+			uid=#{uid}
+		order by
+			modified_time desc
+			limit 0,1
+			
+	</select>
+	
+	<!-- 
+	 * 根据id删除地址
+	 * @param id
+	 * @return
+	Integer deleteById(Integer id); 
+	-->
+	<delete id="deleteById" parameterType="java.lang.Integer">
+		delete from
+			t_address
+		where
+			id=#{id}
+	</delete>
 	
 	
 </mapper>

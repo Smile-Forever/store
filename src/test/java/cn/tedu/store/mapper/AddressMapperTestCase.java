@@ -71,4 +71,25 @@ public class AddressMapperTestCase {
 		System.out.println(u);
 	}
 	
+	@Test
+	public void test2() {
+		Integer id = 5;
+		Address info = addressMapper.findById(id);
+		System.out.println(info);
+	}
+	
+	@Test
+	public void findModified() {
+		Integer uid = 4;
+		Address rows = addressMapper.findLastModified(uid);
+		System.out.println(rows);
+	}
+	
+	@Test
+	public void delete() {
+		Integer id = 6;
+		Integer rows = addressMapper.deleteById(id);
+		System.out.println(rows);
+	}
+	
 }

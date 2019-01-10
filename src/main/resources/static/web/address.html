@@ -1,3 +1,4 @@
+
 <!DOCTYPE html>
 <html>
 
@@ -15,7 +16,7 @@
 		<link rel="stylesheet" type="text/css" href="../css/layout.css" />
 		<link rel="stylesheet" type="text/css" href="../css/top.css" />
 		<link rel="stylesheet" type="text/css" href="../css/footer.css" />
-		<script src="../js/adddel.js" type="text/javascript" charset="utf-8"></script>
+		<script src="../js/adddel11111.js" type="text/javascript" charset="utf-8"></script>
 
 	</head>
 
@@ -275,46 +276,103 @@
 
 		</footer>
 		<!--页脚结束-->
-		<script type="text/javascript">
-			$(document).ready(function(){
+	<script type="text/javascript">
+	// 当页面完成加载时
+	$(document).ready(function() {
+		// 加载当前用户的收货地址列表
+		showList();
+	});
+	
+	function showList() {
+		var url = "../address/list";
+		$.ajax({
+			"url": url,
+			"type": "POST",
+			"dataType": "json",
+			"success": function(json) {
 				$("#list").empty();
-				var url = "../address/list";
-				$.ajax({
-					"url" : url,
-					"type" : "GET",
-					"dataType" : "json",
-					"success" : function(json){
-						var list = json.data;
-						for (var i = 0; i < list.length; i++) {
-							console.log(list[i].isDefault);
-							var html = '<tr>'
-								+ '<td>#{tag}</td>'
-								+ '<td>#{name}</td>'
-								+ '<td>#{district} #{address}</td>'
-								+ '<td>#{phone}</td>'
-								+ '<td><a class="btn btn-xs btn-info" ><span class="fa fa-edit"></span> 修改</a></td>'
-								+ '<td><a class="btn btn-xs add-del btn-info" ><span class="fa fa-trash-o"></span> 删除</a></td>'
-								+ '<td><a #{is_default} class="btn btn-xs add-def btn-default">设为默认</a></td>'
-								+ '</tr>';
-								
-							html = html.replace("#{tag}", list[i].tag);
-							html = html.replace("#{name}", list[i].name);
-							html = html.replace("#{district}", list[i].district);
-							html = html.replace("#{address}", list[i].address);
-							html = html.replace("#{phone}", list[i].phone);
-							
-							if (list[i].isDefault == 1) {
-								html = html.replace("#{is_default}", 'style="display: none;"');
-							} else {
-								html = html.replace("#{is_default}", '');
-							}
-							
-							$("#list").append(html);
-						}
+				
+				var list = json.data;
+				for (var i = 0; i < list.length; i++) {
+					console.log("id=" + list[i].id);
+					
+					var html = '<tr>'
+						+ '<td>#{tag}</td>'
+						+ '<td>#{name}</td>'
+						+ '<td>#{district} #{address}</td>'
+						+ '<td>#{phone}</td>'
+						+ '<td><a class="btn btn-xs btn-info" ><span class="fa fa-edit"></span> 修改</a></td>'
+						+ '<td><a class="btn btn-xs add-del btn-info" href="javascript:deleteById(#{id});"><span class="fa fa-trash-o"></span> 删除</a></td>'
+						+ '<td><a #{is_default} class="btn btn-xs add-def btn-default" href="javascript:setDefault(#{id});">设为默认</a></td>'
+						+ '</tr>';
+						
+					html = html.replace(/#{id}/g, list[i].id);
+					html = html.replace("#{tag}", list[i].tag);
+					html = html.replace("#{name}", list[i].name);
+					html = html.replace("#{district}", list[i].district);
+					html = html.replace("#{address}", list[i].address);
+					html = html.replace("#{phone}", list[i].phone);
+					
+					if (list[i].isDefault == 1) {
+						html = html.replace("#{is_default}", 'style="display: none;"');
+					} else {
+						html = html.replace("#{is_default}", '');
 					}
-				});
-			});
-		</script>
+					
+					$("#list").append(html);
+				}
+			}
+		});
+	}
+	
+	function deleteById(id) {
+		var url = "../address/delete/" + id;
+		$.ajax({
+			"url": url,
+			"type": "GET",
+			"dataType": "json",
+			"success": function(json) {
+				if (json.state == 200) {
+					// 成功
+					showList();
+				} else {
+					// 失败
+					alert(json.message);
+				}
+			},
+			"error": function() {
+				alert("您的登录信息已经过期！请重新登录！");
+				location.href = "login.html";
+			}
+		});
+	}
+	
+	function setDefault(id) {
+		var url = "../address/default/" + id;
+		$.ajax({
+			"url": url,
+			"type": "GET",
+			"dataType": "json",
+			"success": function(json) {
+				if (json.state == 200) {
+					// 成功
+					showList();
+				} else {
+					// 失败
+					alert(json.message);
+				}
+			},
+			"error": function() {
+				alert("您的登录信息已经过期！请重新登录！");
+				location.href = "login.html";
+			}
+		});
+	}
+	</script>
 	</body>
 
 </html>
+
+
+
+

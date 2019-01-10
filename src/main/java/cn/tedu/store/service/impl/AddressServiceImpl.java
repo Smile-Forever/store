@@ -12,6 +12,9 @@ import cn.tedu.store.entity.District;
 import cn.tedu.store.mapper.AddressMapper;
 import cn.tedu.store.service.IAddressService;
 import cn.tedu.store.service.IDistrictService;
+import cn.tedu.store.service.exception.AddressDeniedException;
+import cn.tedu.store.service.exception.AddressNotFoundException;
+import cn.tedu.store.service.exception.DeleteException;
 import cn.tedu.store.service.exception.InsertException;
 import cn.tedu.store.service.exception.UpdateException;
 
@@ -66,9 +69,82 @@ public class AddressServiceImpl implements IAddressService{
 		return addressMapper.findByUid(uid);
 	}
 	
+	/**
+	 * 根据用户id获取收货地址
+	 * @param id 收货地址id
+	 * @return 返回获取到的收货地址 ，如果没有匹配的数据返回null
+	 * 
+	 */
+	private Address findById(Integer id) {
+		return addressMapper.findById(id);
+	}
+	
+	/**
+	 * 最后修改收货地址的信息
+	 * @param id
+	 * @return 匹配的数据
+	 */
+	private Address findLastModified(Integer uid) {
+		return addressMapper.findLastModified(uid);
+	}
+	
+	/**
+	 * 根据id删除收货地址
+	 * @param id
+	 * @return 受影响的行数
+	 */
+	private void deleteById(Integer id) {
+		Integer rows = addressMapper.deleteById(id);
+		if(rows != 1){
+			throw new DeleteException("删除收货地址出现错误!");
+		}
+	}
+	
+	
 	@Override
 	@Transactional
-	public void updateNonDefault(Integer uid, Integer id) {
+	public void delete(Integer uid, Integer id) throws DeleteException {
+	    // 根据id查询收货地址数据：findById(id)
+	    Address data = findById(id);
+	    // 检查数据是否为null
+	    if (data == null) {
+	        // 是：抛出AddressNotFoundException
+	        throw new AddressNotFoundException("删除收货地址失败！尝试删除的数据不存在！");
+	    }
+
+	    // 检查数据归属是否有误
+	    if (data.getUid() != uid) {
+	        // 是：抛出AccessDeniedException
+	        throw new AddressDeniedException("删除收货地址失败！访问数据权限验证不通过！");
+	    }
+
+	    // 执行删除
+	    deleteById(id);
+
+	    // 检查还有没有收货地址数据：getCountByUid(uid)
+	    if (getCountByUid(uid) > 0) {
+	        // 是：判断刚才判断的是否是默认收货地址
+	        if (data.getIsDefault() == 1) {
+	            // -- 是：获取最后修改的收货地址：findLastModified(uid)
+	            Integer lastModifiedId
+	                = findLastModified(uid).getId();
+	            // -- 将最后修改的收货地址设置为默认收货地址
+	            setDefault(uid, lastModifiedId);
+	        }
+	    }
+	}
+	
+	@Override
+	@Transactional
+	public void setDefault(Integer uid, Integer id) {
+		Address data = findById(id);
+		
+		if(data == null) {
+			throw new AddressNotFoundException("设置默认收货地址失败!尝试访问的收货地址不存在");
+		}
+		if(data.getUid() != uid) {
+			throw new AddressDeniedException("设置默认收货地址失败!访问数据权限不通过");
+		}
 		updateNonDefault(uid);
 		updateDefault(id);
 	}
@@ -126,8 +202,4 @@ public class AddressServiceImpl implements IAddressService{
 		addnew(address);
 		return address;
 	}
-
-
-
-	
 }

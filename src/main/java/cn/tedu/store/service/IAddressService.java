@@ -3,6 +3,7 @@ package cn.tedu.store.service;
 import java.util.List;
 
 import cn.tedu.store.entity.Address;
+import cn.tedu.store.service.exception.DeleteException;
 import cn.tedu.store.service.exception.InsertException;
 
 public interface IAddressService {
@@ -29,6 +30,14 @@ public interface IAddressService {
 	 * @param uid
 	 * @param id
 	 */
-	void updateNonDefault(Integer uid , Integer id);
+	void setDefault(Integer uid , Integer id);
+	
+	/**
+	 * 删除收货地址
+	 * @param id 用户id
+	 * @param uid 收货地址归属用户的id
+	 * @throws DeleteException
+	 */
+	void delete(Integer uid , Integer id) throws DeleteException;
 	
 }

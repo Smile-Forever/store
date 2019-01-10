@@ -9,6 +9,7 @@ import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.test.context.junit4.SpringRunner;
 
 import cn.tedu.store.entity.Address;
+import cn.tedu.store.service.exception.DeleteException;
 import cn.tedu.store.service.exception.ServiceException;
 
 @RunWith(SpringRunner.class)
@@ -56,8 +57,21 @@ public class AddressServiceTestCase {
 	public void test1() {
 		try {
 			Integer uid = 4;
-			Integer id = 2;
-			addressService.updateNonDefault(uid, id);
+			Integer id = 1;
+			addressService.setDefault(uid, id);
+			System.out.println("ok");
+		} catch (ServiceException e) {
+			System.out.println("错误类型：" + e.getClass().getName());
+			System.out.println("错误信息：" + e.getMessage());
+		}
+	}
+	
+	@Test
+	public void delete() {
+		try {
+			Integer uid = 4;
+			Integer id = 8;
+			addressService.delete(id, uid);
 			System.out.println("ok");
 		} catch (ServiceException e) {
 			System.out.println("错误类型：" + e.getClass().getName());

@@ -41,4 +41,27 @@ public interface AddressMapper {
 	 * @return
 	 */
 	Integer updateDefault(Integer id);
+	
+	/**
+	 * 根据用户id获取收货地址
+	 * @param id 收货地址id
+	 * @return 返回获取到的收货地址 ，如果没有匹配的数据返回null
+	 * 
+	 */
+	Address findById(Integer id);
+	
+	/**
+	 * 最后修改收货地址的信息
+	 * @param id
+	 * @return 匹配的数据
+	 */
+	Address findLastModified(Integer uid);
+	
+	/**
+	 * 根据id删除收货地址
+	 * @param id
+	 * @return 受影响的行数
+	 */
+	Integer deleteById(Integer id);
+	
 }
