@@ -1,3 +1,4 @@
+
 <!DOCTYPE html>
 <html>
 
@@ -102,44 +103,44 @@
 			<div class="col-md-6">
 
 				<div data="1" class="img-big move-img col-md-12">
-					<img src="../images/portal/11DELLran7000R1605Ssilvery/1_big.png" width="100%" />
+					<img id="img1-big" src="../images/portal/11DELLran7000R1605Ssilvery/1_big.png" width="100%" />
 				</div>
 				<div data="2" class="img-big move-img col-md-12">
-					<img src="../images/portal/11DELLran7000R1605Ssilvery/2_big.png" width="100%" />
+					<img id="img2-big" src="../images/portal/11DELLran7000R1605Ssilvery/2_big.png" width="100%" />
 				</div>
 				<div data="3" class="img-big move-img col-md-12">
-					<img src="../images/portal/11DELLran7000R1605Ssilvery/3_big.png" width="100%" />
+					<img id="img3-big" src="../images/portal/11DELLran7000R1605Ssilvery/3_big.png" width="100%" />
 				</div>
 				<div data="4" class="img-big move-img col-md-12">
-					<img src="../images/portal/11DELLran7000R1605Ssilvery/4_big.png" width="100%" />
+					<img id="img4-big" src="../images/portal/11DELLran7000R1605Ssilvery/4_big.png" width="100%" />
 				</div>
 				<div data="5" class="img-big move-img col-md-12">
-					<img src="../images/portal/11DELLran7000R1605Ssilvery/5_big.png" width="100%" />
+					<img id="img5-big" src="../images/portal/11DELLran7000R1605Ssilvery/5_big.png" width="100%" />
 				</div>
 
 				<div data="1" class="col-md-2 img-small">
-					<img src="../images/portal/11DELLran7000R1605Ssilvery/1.jpg" width="100%" />
+					<img id="img1" src="../images/portal/11DELLran7000R1605Ssilvery/1.jpg" width="100%" />
 				</div>
 				<div data="2" class="col-md-2 img-small">
-					<img src="../images/portal/11DELLran7000R1605Ssilvery/2.jpg" width="100%" />
+					<img id="img2" src="../images/portal/11DELLran7000R1605Ssilvery/2.jpg" width="100%" />
 				</div>
 				<div data="3" class="col-md-2 img-small">
-					<img src="../images/portal/11DELLran7000R1605Ssilvery/3.jpg" width="100%" />
+					<img id="img3" src="../images/portal/11DELLran7000R1605Ssilvery/3.jpg" width="100%" />
 				</div>
 				<div data="4" class="col-md-2 img-small">
-					<img src="../images/portal/11DELLran7000R1605Ssilvery/4.jpg" width="100%" />
+					<img id="img4" src="../images/portal/11DELLran7000R1605Ssilvery/4.jpg" width="100%" />
 				</div>
 				<div data="5" class="col-md-2 img-small">
-					<img src="../images/portal/11DELLran7000R1605Ssilvery/5.jpg" width="100%" />
+					<img id="img5" src="../images/portal/11DELLran7000R1605Ssilvery/5.jpg" width="100%" />
 				</div>
 
 			</div>
 
 			<div class="col-md-6">
-				<h3 class="col-md-12 title-row-1" title="戴尔Dell 燃700R1605银色">戴尔Dell 燃700R1605银色</h3>
-				<h4 class="col-md-12 text-row-1"><small>仅上海，广州，沈阳仓有货！预购从速！</small></h4>
+				<h3 id="goods-title" class="col-md-12">戴尔Dell 燃700R1605银色</h3>
+				<h4 class="col-md-12 text-row-1"><small id="goods-sell-point">仅上海，广州，沈阳仓有货！预购从速！</small></h4>
 				<div class="col-md-12 price-bar">
-					<small>学员售价：</small> ¥4899.00
+					<small>学员售价：</small> ¥<span id="goods-price">4899</span>.00
 					<div><small>*退货补运费 *7天无理由退货 *24小时快速退款 </small></div>
 				</div>
 				<form class="form-inline product-form col-md-12" role="form">
@@ -314,6 +315,52 @@
 
 		</footer>
 		<!--页脚结束-->
+	<script type="text/javascript" src="../js/jquery-getUrlParam.js"></script>
+	<script type="text/javascript">
+	$(document).ready(function() {
+		// 获取url中的id
+		var id = $.getUrlParam("id");
+		// 显示商品详情
+		showGoodsDetails(id);
+	});
+	
+	function showGoodsDetails(id) {
+		var url = "../goods/details/" + id;
+		$.ajax({
+			"url": url,
+			"type": "GET",
+			"dataType": "json",
+			"success": function(json) {
+				var goods = json.data;
+				if (goods == null) {
+					location.href = "index.html";
+					return;
+				}
+				
+				$("#goods-title").html(goods.title);
+				$("#goods-sell-point").html(goods.sellPoint);
+				$("#goods-price").html(goods.price);
+				
+				$("#img1-big").attr("src", ".." + goods.image + "1_big.png");
+				$("#img1").attr("src", ".." + goods.image + "1.jpg");
+				$("#img2-big").attr("src", ".." + goods.image + "2_big.png");
+				$("#img2").attr("src", ".." + goods.image + "2.jpg");
+				$("#img3-big").attr("src", ".." + goods.image + "3_big.png");
+				$("#img3").attr("src", ".." + goods.image + "3.jpg");
+				$("#img4-big").attr("src", ".." + goods.image + "4_big.png");
+				$("#img4").attr("src", ".." + goods.image + "4.jpg");
+				$("#img5-big").attr("src", ".." + goods.image + "5_big.png");
+				$("#img5").attr("src", ".." + goods.image + "5.jpg");
+			},
+			"error": function() {
+				location.href = "index.html";
+			}
+		});
+	}
+	</script>
 	</body>
 
 </html>
+
+
+

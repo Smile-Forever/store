@@ -65,6 +65,7 @@ public class ResponseResult<T> implements Serializable {
 		this(state);
 		setData(data);
 	}
+	
 
 	public Integer getState() {
 		return state;
