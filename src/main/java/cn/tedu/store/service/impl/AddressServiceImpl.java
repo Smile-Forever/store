@@ -12,7 +12,7 @@ import cn.tedu.store.entity.District;
 import cn.tedu.store.mapper.AddressMapper;
 import cn.tedu.store.service.IAddressService;
 import cn.tedu.store.service.IDistrictService;
-import cn.tedu.store.service.exception.AddressDeniedException;
+import cn.tedu.store.service.exception.AccessDeniedException;
 import cn.tedu.store.service.exception.AddressNotFoundException;
 import cn.tedu.store.service.exception.DeleteException;
 import cn.tedu.store.service.exception.InsertException;
@@ -115,7 +115,7 @@ public class AddressServiceImpl implements IAddressService{
 	    // 检查数据归属是否有误
 	    if (data.getUid() != uid) {
 	        // 是：抛出AccessDeniedException
-	        throw new AddressDeniedException("删除收货地址失败！访问数据权限验证不通过！");
+	        throw new AccessDeniedException("删除收货地址失败！访问数据权限验证不通过！");
 	    }
 
 	    // 执行删除
@@ -143,7 +143,7 @@ public class AddressServiceImpl implements IAddressService{
 			throw new AddressNotFoundException("设置默认收货地址失败!尝试访问的收货地址不存在");
 		}
 		if(data.getUid() != uid) {
-			throw new AddressDeniedException("设置默认收货地址失败!访问数据权限不通过");
+			throw new AccessDeniedException("设置默认收货地址失败!访问数据权限不通过");
 		}
 		updateNonDefault(uid);
 		updateDefault(id);

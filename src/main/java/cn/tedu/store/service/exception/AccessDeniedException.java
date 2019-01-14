@@ -6,31 +6,31 @@ package cn.tedu.store.service.exception;
  * @author Smile
  *
  */
-public class AddressDeniedException extends ServiceException {
+public class AccessDeniedException extends ServiceException {
 
 	/**
 	 * 
 	 */
 	private static final long serialVersionUID = 1L;
 
-	public AddressDeniedException() {
+	public AccessDeniedException() {
 		super();
 	}
 
-	public AddressDeniedException(String message, Throwable cause, boolean enableSuppression,
+	public AccessDeniedException(String message, Throwable cause, boolean enableSuppression,
 			boolean writableStackTrace) {
 		super(message, cause, enableSuppression, writableStackTrace);
 	}
 
-	public AddressDeniedException(String message, Throwable cause) {
+	public AccessDeniedException(String message, Throwable cause) {
 		super(message, cause);
 	}
 
-	public AddressDeniedException(String message) {
+	public AccessDeniedException(String message) {
 		super(message);
 	}
 
-	public AddressDeniedException(Throwable cause) {
+	public AccessDeniedException(Throwable cause) {
 		super(cause);
 	}
 	
