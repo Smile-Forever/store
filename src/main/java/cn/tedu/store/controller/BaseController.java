@@ -10,7 +10,7 @@ import cn.tedu.store.controller.exception.FileSizeOutOfLimitException;
 import cn.tedu.store.controller.exception.FileTypeNotSupportExceptiom;
 import cn.tedu.store.controller.exception.FileUploadException;
 import cn.tedu.store.controller.exception.RequestException;
-import cn.tedu.store.service.exception.AddressDeniedException;
+import cn.tedu.store.service.exception.AccessDeniedException;
 import cn.tedu.store.service.exception.AddressNotFoundException;
 import cn.tedu.store.service.exception.DeleteException;
 import cn.tedu.store.service.exception.DuplicateKeyException;
@@ -40,7 +40,7 @@ public abstract class BaseController {
 		}else if(e instanceof PasswordNotMatchException) {
 			//402 - 密码错误
 			return new ResponseResult<>(402 , e.getMessage());
-		}else if(e instanceof AddressDeniedException) {
+		}else if(e instanceof AccessDeniedException) {
 			//403 - 访问的地址不存在异常
 			return new ResponseResult<>(403 , e.getMessage());
 		}else if(e instanceof AddressNotFoundException) {
