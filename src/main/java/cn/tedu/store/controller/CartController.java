@@ -51,8 +51,7 @@ public class CartController extends BaseController{
 	}
 	
 	@GetMapping("/get_by_ids")
-	public ResponseResult<List<CartVO>> getByIds(Integer[] ids, HttpSession session){
-		Integer uid = getUidFromSession(session);
+	public ResponseResult<List<CartVO>> getByIds(@RequestParam("cart_id")Integer[] ids){
 		List<CartVO> data = cartService.getByIds(ids);
 		return new ResponseResult<List<CartVO>>(SUCCESS , data);
 	}

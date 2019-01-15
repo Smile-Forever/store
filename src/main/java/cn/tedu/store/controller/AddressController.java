@@ -35,7 +35,7 @@ public class AddressController extends BaseController{
 		return new ResponseResult<Void>(SUCCESS);
 	}
 	
-	@PostMapping("/list")
+	@RequestMapping("/list")
 	public ResponseResult<List<Address>> handleAddress(HttpSession session){
 		Integer uid = getUidFromSession(session);
 		List<Address> list = addressService.getListUid(uid);

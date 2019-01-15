@@ -24,6 +24,33 @@ public class CartServiceImpl implements ICartService {
 	@Autowired
 	private CartMapper cartMapper;
 
+	
+
+	/**
+	 * 根据用户id和商品id查询购物车数据
+	 * @param uid 用户id
+	 * @param goodsId 商品id
+	 * @return 匹配的购物车数据，如果没有匹配的数据，则返回null
+	 */
+	private Cart findByUidAndGid(
+		Integer uid, Long goodsId) {
+		return cartMapper
+			.findByUidAndGid(uid, goodsId);
+	}
+
+	/**
+	 * 新增购物车数据
+	 * @param cart 购物车数据
+	 */
+	private void addnew(Cart cart) {
+		Integer rows = cartMapper.addnew(cart);
+		if (rows != 1) {
+			throw new InsertException(
+				"创建购物车数据时发生未知错误！");
+		}
+	}
+	
+	
 	@Override
 	public void addToCart(
 		String username, Cart cart) 
@@ -52,30 +79,7 @@ public class CartServiceImpl implements ICartService {
 			updateCount(dataId, newCount);
 		}
 	}
-
-	/**
-	 * 根据用户id和商品id查询购物车数据
-	 * @param uid 用户id
-	 * @param goodsId 商品id
-	 * @return 匹配的购物车数据，如果没有匹配的数据，则返回null
-	 */
-	private Cart findByUidAndGid(
-		Integer uid, Long goodsId) {
-		return cartMapper
-			.findByUidAndGid(uid, goodsId);
-	}
-
-	/**
-	 * 新增购物车数据
-	 * @param cart 购物车数据
-	 */
-	private void addnew(Cart cart) {
-		Integer rows = cartMapper.addnew(cart);
-		if (rows != 1) {
-			throw new InsertException(
-				"创建购物车数据时发生未知错误！");
-		}
-	}
+	
 	
 	/**
 	 * 根据用户id查询该用户的购物车数据列表
@@ -109,14 +113,17 @@ public class CartServiceImpl implements ICartService {
 		}
 	}
 	
-	private List<CartVO> findByIds(Integer[] id){
-		return cartMapper.findByIds(id);
+	private List<CartVO> findByIds(Integer[] ids){
+		return cartMapper.findByIds(ids);
 	}
 	
 	@Override
 	public List<CartVO> getByIds(Integer[] ids) {
 		return findByIds(ids);
 	}
+	
+	
+	
 	
 
 	@Override

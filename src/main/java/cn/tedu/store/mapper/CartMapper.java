@@ -57,5 +57,5 @@ public interface CartMapper {
 	 * @param id
 	 * @return
 	 */
-	List<CartVO> findByIds(Integer[] id);
+	List<CartVO> findByIds(Integer[] ids);
 }
