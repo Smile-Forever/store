@@ -2,6 +2,7 @@ package cn.tedu.store.mapper;
 
 import cn.tedu.store.entity.Order;
 import cn.tedu.store.entity.OrderItem;
+import cn.tedu.store.vo.OrderVO;
 
 public interface OrderMapper {
 	
@@ -17,4 +18,11 @@ public interface OrderMapper {
 	 * @return
 	 */
 	Integer insertOrderItem(OrderItem orderItem);
+	
+	/**
+	 * 根据id查询订单详情
+	 * @param id
+	 * @return 匹配订单详情
+	 */
+	OrderVO findById(Integer id);
 }

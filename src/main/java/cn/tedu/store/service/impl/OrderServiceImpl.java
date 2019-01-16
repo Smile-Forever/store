@@ -16,8 +16,10 @@ import cn.tedu.store.mapper.OrderMapper;
 import cn.tedu.store.service.IAddressService;
 import cn.tedu.store.service.ICartService;
 import cn.tedu.store.service.IOrderService;
+import cn.tedu.store.service.exception.AddressNotFoundException;
 import cn.tedu.store.service.exception.InsertException;
 import cn.tedu.store.vo.CartVO;
+import cn.tedu.store.vo.OrderVO;
 
 /**
  * 
@@ -32,13 +34,30 @@ public class OrderServiceImpl implements IOrderService{
 	private IAddressService addressService;
 	@Autowired
 	private ICartService cartService;
+	
+	
+	private void insertOrder(Order order) {
+		Integer rows = orderMapper.insertOrder(order);
+		if(rows != 1) {
+			throw new InsertException("插入订单数据时发生未知错误！");
+		}
+	}
+	/**
+	 * 插入订单商品数据
+	 * @param orderItem
+	 * @return
+	 */
+	private void insertOrderItem(OrderItem orderItem) {
+		Integer rows = orderMapper.insertOrderItem(orderItem);
+		if(rows != 1) {
+			throw new InsertException("插入订单商品数据时发生未知错误！");
+		}
+	}
 	/**
 	 * 插入订单数据
 	 * @param order
 	 * @return
 	 */
-	
-	
 	@Override
 	@Transactional
 	public Order createOrder(Integer uid, String username, Integer addressId, Integer[] cartIds)
@@ -80,6 +99,9 @@ public class OrderServiceImpl implements IOrderService{
 		order.setPay(pay);
 	    // 通过addressService.getById()得到收货地址数据
 		Address address = addressService.getById(addressId);
+		if(address == null) {
+			throw new AddressNotFoundException("创建订单失败，收货地址有误!刷新后重试!");
+		}
 	    // order属性：recv_4，OK
 		order.setRecvName(address.getName());
 		order.setRecvPhone(address.getPhone());
@@ -107,22 +129,12 @@ public class OrderServiceImpl implements IOrderService{
 		return order;
 	}	
 	
-	private void insertOrder(Order order) {
-		Integer rows = orderMapper.insertOrder(order);
-		if(rows != 1) {
-			throw new InsertException("插入订单数据时发生未知错误！");
-		}
+	private OrderVO findById(Integer id) {
+		return orderMapper.findById(id);
 	}
-	/**
-	 * 插入订单商品数据
-	 * @param orderItem
-	 * @return
-	 */
-	private void insertOrderItem(OrderItem orderItem) {
-		Integer rows = orderMapper.insertOrderItem(orderItem);
-		if(rows != 1) {
-			throw new InsertException("插入订单商品数据时发生未知错误！");
-		}
+	
+	@Override
+	public OrderVO getById(Integer id) {
+		return findById(id);
 	}
-
 }

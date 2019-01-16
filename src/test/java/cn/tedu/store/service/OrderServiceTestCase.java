@@ -8,6 +8,7 @@ import org.springframework.test.context.junit4.SpringRunner;
 
 import cn.tedu.store.entity.Order;
 import cn.tedu.store.service.exception.ServiceException;
+import cn.tedu.store.vo.OrderVO;
 
 @RunWith(SpringRunner.class)
 @SpringBootTest
@@ -24,6 +25,18 @@ public class OrderServiceTestCase {
 			Integer addressId = 2;
 			Integer[] cartIds = { 7,8,9 };
 			Order order = service.createOrder(uid, username, addressId, cartIds);
+			System.err.println(order);
+		} catch (ServiceException e) {
+			System.err.println("错误类型：" + e.getClass().getName());
+			System.err.println("错误描述：" + e.getMessage());
+		}
+	}
+	
+	@Test
+	public void test() {
+		try {
+			Integer id = 4;
+			OrderVO order = service.getById(id);
 			System.err.println(order);
 		} catch (ServiceException e) {
 			System.err.println("错误类型：" + e.getClass().getName());

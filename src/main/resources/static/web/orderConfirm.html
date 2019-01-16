@@ -297,7 +297,6 @@
 						+ '<td><span>#{totalPrice}</span></td>'
 						+ '</tr>';
 						
-					
 					html = html.replace(/#{id}/g, list[i].id);
 					html = html.replace(/#{image}/g, list[i].image);
 					html = html.replace(/#{title}/g, list[i].title);
@@ -349,7 +348,11 @@
 			"type":"GET",
 			"dataType":"json",
 			"success":function(json){
+				if(json.state == 200){
 				alert("创建成功!");
+				}else{
+					alert(json.message);
+				}
 			},
 			"error":function(){
 				alert("您的登录信息 已经过期，请重新登录!");

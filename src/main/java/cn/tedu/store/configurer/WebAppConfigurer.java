@@ -21,6 +21,7 @@ public class WebAppConfigurer
 		pathPatterns.add("/user/**");
 		pathPatterns.add("/web/**");
 		pathPatterns.add("/address/**");
+		pathPatterns.add("/order/**");
 		// 白名单
 		List<String> excludePathPatterns
 			= new ArrayList<>();

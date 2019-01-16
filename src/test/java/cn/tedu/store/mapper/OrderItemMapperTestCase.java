@@ -8,6 +8,7 @@ import org.springframework.test.context.junit4.SpringRunner;
 
 import cn.tedu.store.entity.Order;
 import cn.tedu.store.entity.OrderItem;
+import cn.tedu.store.vo.OrderVO;
 
 @RunWith(SpringRunner.class)
 @SpringBootTest
@@ -35,6 +36,13 @@ public class OrderItemMapperTestCase {
 		oi.setGoodsPrice(2000l);
 		Integer rows = orderMapper.insertOrderItem(oi);
 		System.out.println(rows);
+	}
+	
+	@Test
+	public void test1() {
+		Integer id = 4;
+		OrderVO rows = orderMapper.findById(id);
+		System.err.println(rows);
 	}
 	
 }
