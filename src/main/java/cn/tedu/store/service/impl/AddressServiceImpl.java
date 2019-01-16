@@ -76,6 +76,7 @@ public class AddressServiceImpl implements IAddressService{
 	 * 
 	 */
 	private Address findById(Integer id) {
+		
 		return addressMapper.findById(id);
 	}
 	
@@ -200,6 +201,12 @@ public class AddressServiceImpl implements IAddressService{
 		address.setModifiedTime(new Date());
 	    // 执行创建新地址
 		addnew(address);
+		System.out.println("44"+address);
 		return address;
+	}
+
+	@Override
+	public Address getById(Integer id) {
+		return findById(id);
 	}
 }

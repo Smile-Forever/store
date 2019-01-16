@@ -40,4 +40,11 @@ public interface IAddressService {
 	 */
 	void delete(Integer uid , Integer id) throws DeleteException;
 	
+	/**
+	 * 
+	 * @param id
+	 * @return
+	 */
+	Address getById(Integer id);
+	
 }

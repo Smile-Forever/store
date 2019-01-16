@@ -112,6 +112,8 @@
 	<select id="findById" resultType="cn.tedu.store.entity.Address">
 		select
 			uid,
+			name,phone,
+			district,address,
 			is_default as isDefault
          from
          	t_address

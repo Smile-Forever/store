@@ -29,7 +29,7 @@ public interface ICartService {
 	 * @param uid
 	 * @return
 	 */
-	List<CartVO> getindById(Integer uid);
+	List<CartVO> getByUid(Integer uid);
 	
 	/**
 	 * 增加购物车中商品的数量

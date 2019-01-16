@@ -39,7 +39,7 @@ public class CartController extends BaseController{
 	@GetMapping("/list")
 	public ResponseResult<List<CartVO>> getById(HttpSession session){
 		Integer uid = getUidFromSession(session);
-		List<CartVO> data = cartService.getindById(uid);
+		List<CartVO> data = cartService.getByUid(uid);
 		return new ResponseResult<List<CartVO>>(SUCCESS , data);
 	}
 	

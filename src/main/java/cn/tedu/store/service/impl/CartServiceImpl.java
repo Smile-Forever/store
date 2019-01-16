@@ -127,7 +127,7 @@ public class CartServiceImpl implements ICartService {
 	
 
 	@Override
-	public List<CartVO> getindById(Integer uid) {
+	public List<CartVO> getByUid(Integer uid) {
 		return findByUid(uid);
 	}
 
